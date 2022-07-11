@@ -1,0 +1,75 @@
+{
+	"name": "chaos-monorepo",
+	"version": "1.0.0",
+	"description": "chaos cli",
+	"private": true,
+	"engines": {
+		"node": ">=14.18.0"
+	},
+	"keywords": [
+		"chaos",
+		"chaos-cli"
+	],
+	"scripts": {
+		"preinstall": "npx only-allow pnpm",
+		"postinstall": "simple-git-hooks",
+		"format": "prettier --write --cache .",
+		"lint": "eslint --cache packages/*/{src,types,__tests__}/** scripts/**",
+		"typecheck": "tsc -p scripts --noEmit",
+		"build": "pnpm -r --filter=./packages/* run build",
+		"dev": "pnpm -r --parallel --filter=./packages/* run dev"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/chaosfoxy/chaos.git"
+	},
+	"simple-git-hooks": {
+		"pre-commit": "pnpm exec lint-staged --concurrent false",
+		"commit-msg": "pnpm exec tsx scripts/verifyCommit.ts $1"
+	},
+	"lint-staged": {
+		"*": [
+			"prettier --write --cache --ignore-unknown"
+		],
+		"packages/*/{src,types}/**/*.ts": [
+			"eslint --cache --fix"
+		],
+		"packages/**/*.d.ts": [
+			"eslint --cache --fix"
+		],
+		"playground/**/__tests__/**/*.ts": [
+			"eslint --cache --fix"
+		]
+	},
+	"packageManager": "pnpm@7.5.0",
+	"pnpm": {
+		"overrides": {}
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/chaosfoxy/chaos/issues"
+	},
+	"homepage": "https://github.com/chaosfoxy/chaos#readme",
+	"devDependencies": {
+		"@types/node": "^18.0.3",
+		"@typescript-eslint/eslint-plugin": "^5.30.5",
+		"@typescript-eslint/parser": "^5.30.5",
+		"conventional-changelog-cli": "^2.2.2",
+		"cross-env": "^7.0.3",
+		"eslint": "^8.19.0",
+		"fs-extra": "^10.1.0",
+		"kill-port": "^2.0.1",
+		"lint-staged": "^13.0.3",
+		"minimist": "^1.2.6",
+		"npm-run-all": "^4.1.5",
+		"picocolors": "^1.0.0",
+		"pnpm": "^7.5.0",
+		"prettier": "^2.7.1",
+		"rimraf": "^3.0.2",
+		"semver": "^7.3.7",
+		"simple-git-hooks": "^2.8.0",
+		"tsx": "^3.7.1",
+		"typescript": "^4.7.4"
+	}
+}
